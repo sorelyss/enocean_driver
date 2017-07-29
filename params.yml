@@ -1,7 +1,0 @@
-port: /dev/ttyUSB0
-svc_base_uri: scratch.ns/light_test
-name: kitchen
-USB300_id: ff:c7:04:80
-poll_interval: 10s
-switch_names: [main_lights,second_lights,fan,third_lights]
-switch_modes: [15m,15m,15m,15m]
