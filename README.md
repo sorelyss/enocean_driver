@@ -8,7 +8,7 @@ Finally there is a library for the integration with Bodge in order to make easie
 - <a href="https://golang.org/dl/">Go</a>
 - <a href="https://www.python.org/downloads/">Python 2.7</a>
 - <a href="https://github.com/immesys/bw2">BW2 (curl get.bw2.io/agent | sh)</a>
-- <a href="https://github.com/gtfierro/bodge">Python 2.7</a>
+- <a href="https://github.com/gtfierro/bodge">Bodge</a>
 ## Setup
 To setup your machine the \~/.bashrc file should look like:
 ```bash
