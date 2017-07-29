@@ -44,7 +44,7 @@ var crcTable = []byte{
 
 type USB300 struct {
   dongle_id []byte
-  ser *serial.Port
+  serial_c *serial.Config
   states []bool
   last_commits []int64
   switch_names []string
@@ -64,6 +64,7 @@ func NewUSB300(dongle_id string, port string) (*USB300, error) {
   if err != nil {
       return nil, fmt.Errorf("Failed connecting the USB300: %v", err)
   }
+  ser.Close()
   hex_array := strings.Split(dongle_id,":")
 
   base_id := []byte{}
@@ -73,7 +74,7 @@ func NewUSB300(dongle_id string, port string) (*USB300, error) {
   }
 
   usb300 := USB300 {
-    ser: ser,
+    serial_c: c,
     dongle_id: []byte(base_id),
     states: []bool{}, 
     last_commits: []int64{},
@@ -124,6 +125,11 @@ func send4BTelegram(v *USB300, tx_index int, data []byte) {
   // Send the data array through the serial port 
   // using the input id index
   //    index: (Integer) index of the control node
+  
+  ser, err := serial.OpenPort(v.serial_c)
+  if err != nil {
+    panic(fmt.Errorf("Failed connecting the USB300: %v", err))
+  }
   var crc uint8
   data = append(data, getTx_ID(byte(tx_index), 3, v.dongle_id)...)
   for index := range data {
@@ -131,8 +137,8 @@ func send4BTelegram(v *USB300, tx_index int, data []byte) {
   }
   telegram := append([]byte("\x55\x00\x0A\x00\x01\x80"), data...)
   telegram = append(telegram, crc)
-  v.ser.Write(telegram)
-  //ser.Close()
+  ser.Write(telegram)
+  ser.Close()
 }
 
 func getTx_ID(Iface_index byte, index int, base_id []byte) []byte {
